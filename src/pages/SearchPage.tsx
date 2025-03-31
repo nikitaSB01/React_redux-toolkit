@@ -2,6 +2,15 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchMovies } from "../features/search/searchSlice";
 import MovieCard from "../components/MovieCard";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Alert,
+  Spinner,
+} from "react-bootstrap";
 
 function SearchPage() {
   const [query, setQuery] = useState("");
@@ -15,27 +24,52 @@ function SearchPage() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Поиск фильмов</h2>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Введите название фильма"
-      />
-      <button onClick={handleSearch}>Поиск</button>
+    <Container className="mt-4">
+      <h2 className="mb-4">Поиск фильмов</h2>
 
-      {loading && <p>Загрузка...</p>}
-      {error && <p style={{ color: "red" }}>Ошибка: {error}</p>}
-
-      <div
-        style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 20 }}
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
       >
-        {movies.map((movie) => (
-          <MovieCard key={movie.imdbID} movie={movie} />
-        ))}
+        <Row className="align-items-center">
+          <Col xs={8}>
+            <Form.Control
+              type="text"
+              placeholder="Введите название фильма"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </Col>
+          <Col xs={4}>
+            <Button variant="dark" type="submit" className="w-100">
+              Поиск
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+
+      <div className="mt-3">
+        {loading && <Spinner animation="border" className="d-block mx-auto" />}
+        {error && (
+          <Alert variant="danger">
+            Ошибка:{" "}
+            {error === "Too many results."
+              ? "Слишком много результатов, уточните запрос."
+              : error}
+          </Alert>
+        )}
       </div>
-    </div>
+
+      <Row className="mt-4">
+        {movies.map((movie) => (
+          <Col key={movie.imdbID} xs={12} sm={6} md={4} lg={3} className="mb-4">
+            <MovieCard movie={movie} />
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 }
 

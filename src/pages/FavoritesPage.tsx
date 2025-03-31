@@ -1,3 +1,4 @@
+import { Container, Row, Col, Alert } from "react-bootstrap";
 import { useAppSelector } from "../hooks";
 import MovieCard from "../components/MovieCard";
 
@@ -5,18 +6,28 @@ function FavoritesPage() {
   const favorites = useAppSelector((state) => state.favorites.list);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Избранное</h2>
+    <Container className="mt-4">
+      <h2 className="mb-4">Избранные фильмы</h2>
+
       {favorites.length === 0 ? (
-        <p>Нет избранных фильмов</p>
+        <Alert variant="info">У вас пока нет избранных фильмов.</Alert>
       ) : (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+        <Row className="justify-content-center">
           {favorites.map((movie) => (
-            <MovieCard key={movie.imdbID} movie={movie} />
+            <Col
+              key={movie.imdbID}
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              className="mb-4"
+            >
+              <MovieCard movie={movie} />
+            </Col>
           ))}
-        </div>
+        </Row>
       )}
-    </div>
+    </Container>
   );
 }
 

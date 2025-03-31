@@ -29,7 +29,7 @@ export const fetchMovies = createAsyncThunk(
   async (query: string, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
+        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}&type=movie`
       );
       if (response.data.Response === "False") {
         return rejectWithValue(response.data.Error);
